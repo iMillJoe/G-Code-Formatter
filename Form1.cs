@@ -56,10 +56,22 @@ namespace G_Code_Formatter
 
         private void loadFile()
         {
-            var sr = new StreamReader("C:\\Users\\joseph.million\\Desktop\\Code Formatter Text\\TEST-PROG.MIN");
-            text = sr.ReadToEnd();
-            textBox.Text = text;
-            textBox1.Text = text;
+            string testFile = 
+                @"G00 Z=VPPLZ
+                G00 G90 G15 H1 
+                (THIS IS A COMMENT) 
+                G4 F       12.0
+                G1 X=1.0 (MULTI)   Y0.0(BECAUSE PEOPLE)F1.2( DO?  )
+                N1000 G3 X2. Y 5. 
+                (NESTED (COMMENT) BECAUSE WHY NOT?)
+                N5 G1 P100 G50
+                B200
+                VC[1]=100
+                NAT200
+                G0 Z=VPPLZ Y=VPPLY
+                M2";
+            textBox.Text = testFile;
+            textBox1.Text = testFile;
         }
 
         private void FormatButton_Click(object sender, EventArgs e)
