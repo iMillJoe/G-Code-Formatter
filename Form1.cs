@@ -16,17 +16,11 @@ namespace G_Code_Formatter
     {
         private OpenFileDialog openFileDialog;
         private string text;
-        private GCodeProgram gprog;
         public Form1()
         {
             InitializeComponent();
             openFileDialog = new OpenFileDialog();
         }
-        private string wordLetterBuilder;
-        private string wordValueBuilder;
-        private Block builderBlock;
-        private Word builderWord;
-
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
@@ -38,8 +32,6 @@ namespace G_Code_Formatter
                     text = sr.ReadToEnd();
                     textBox.Text = text;
                     var path = openFileDialog.FileName;
-
-                    gprog = new GCodeProgram();
                 }
                 catch
                 {
@@ -57,34 +49,32 @@ namespace G_Code_Formatter
         private void loadFile()
         {
             string testFile = 
-                @"G00 Z=VPPLZ
-                G00 G90 G15 H1 
-                (THIS IS A COMMENT) 
-                G4 F       12.0
-                G1 X=1.0 (MULTI)   Y0.0(BECAUSE PEOPLE)F1.2( DO?  )
-                N1000 G3 X2. Y 5. 
-                (NESTED (COMMENT) BECAUSE WHY NOT?)
-                N5 G1 P100 G50
-                B200
-                VC[1]=100
-                NAT200
-                G0 Z=VPPLZ Y=VPPLY
-                M2";
+@"G00 Z=VPPLZ
+G00 G90 G15 H1 
+(THIS IS A COMMENT) 
+G4 F       12.0
+G1 X=1.0 (MULTI)   Y0.0(BECAUSE PEOPLE)F1.2( DO?  )
+N1000 G3 X2. Y 5. 
+(NESTED (COMMENT) BECAUSE WHY NOT?)
+N5 G1 P100 G50
+B200
+VC[1]=100
+NAT200
+G0 Z=VPPLZ Y=VPPLY
+M2";
             textBox.Text = testFile;
             textBox1.Text = testFile;
         }
 
-        private void FormatButton_Click(object sender, EventArgs e)
+
+        private string formatGCode(string gCode)
         {
-            if (text == null)
-            {
-                loadFile();
-            } 
-            wordLetterBuilder = "";
-            wordValueBuilder = "";
-            builderBlock = new Block();
-            builderWord = new Word();
-            gprog = new GCodeProgram();
+
+            string wordValueBuilder = "";
+            string wordLetterBuilder = "";
+            Block builderBlock = new Block();
+            Word builderWord = new Word();
+            GCodeProgram gprog = new GCodeProgram();
             text = textBox.Text;
             int parens = 0;
             if (text != null)
@@ -152,7 +142,7 @@ namespace G_Code_Formatter
                             }
                         }
                         else if (c == '(')
-                        { 
+                        {
                             parens += 1;
                             wordLetterBuilder += c;
                         }
@@ -216,7 +206,7 @@ namespace G_Code_Formatter
                             //builderWord.empty();
                             //wordLetterBuilder = "";
                             //wordValueBuilder = "";
-                            parens-=1;
+                            parens -= 1;
                         }
                     }
                 }
@@ -242,14 +232,24 @@ namespace G_Code_Formatter
                     gprog.addBlock(builderBlock);
                     builderBlock.empty();
                 }
-                textBox.Text = gprog.text();
-                MessageBox.Show("Thanks!, check debugger");
+
 
             }
-            else
-            {
-                MessageBox.Show("Please Select File");
-            }
+
+            return gprog.text();
+      
+        }
+
+
+
+
+        private void FormatButton_Click(object sender, EventArgs e)
+        {
+
+            //loadFile();
+            textBox.Text = formatGCode(textBox.Text);
+            MessageBox.Show("Thanks!, check debugger");
+
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
@@ -266,7 +266,7 @@ namespace G_Code_Formatter
             else if (c >= 97 && c <= 122)
             {
                 // Warn of lowercase letters
-                MessageBox.Show("Avoid Lowercase letters");
+                MessageBox.Show("Avoid Lowercase Letters");
                 return false;
             }
             return false;
@@ -341,7 +341,6 @@ namespace G_Code_Formatter
                 word.value = value;
                 word.letter = letter;
                 return word;
-                //return (Word) this.MemberwiseClone();
 
             }
         }
@@ -409,12 +408,16 @@ namespace G_Code_Formatter
 
             public string text()
             {
-                string output = "";
-                foreach (Block block in this.program)
+                if (this.program != null)
                 {
-                    output += block.text();
+                    string output = "";
+                    foreach (Block block in this.program)
+                    {
+                        output += block.text();
+                    }
+                    return output;
                 }
-                return output;
+                return null;
             }
         }
 
