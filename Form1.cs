@@ -17,14 +17,11 @@ namespace G_Code_Formatter
     {
         private OpenFileDialog openFileDialog;
         private string text;
-        private GCodeProgram gprog;
         public Form1()
         {
             InitializeComponent();
             openFileDialog = new OpenFileDialog();
         }
-
-
         private void OpenButton_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -35,8 +32,6 @@ namespace G_Code_Formatter
                     text = sr.ReadToEnd();
                     textBox.Text = text;
                     var path = openFileDialog.FileName;
-
-                    gprog = new GCodeProgram();
                 }
                 catch
                 {
@@ -70,13 +65,20 @@ G0 Z = VPPLZ Y = VPPLY
 M2";
             textBox.Text = text;
             textBox1.Text = text;
+
+ 
         }
 
-        private void FormatButton_Click(object sender, EventArgs e)
+
+        private string formatGCode(string gCode)
         {
+
             string stringToFormat = textBox.Text;
             G_CodeFormatter formatter = new G_CodeFormatter();
             textBox.Text = formatter.formatCode(stringToFormat);
+
+
+
 
 
 
@@ -86,6 +88,8 @@ M2";
         {
 
         }
+
+
 
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
