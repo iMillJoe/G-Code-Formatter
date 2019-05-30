@@ -69,18 +69,12 @@ M2";
  
         }
 
-
-        private string formatGCode(string gCode)
+        private void FormatButton_Click(object sender, EventArgs e)
         {
 
             string stringToFormat = textBox.Text;
             G_CodeFormatter formatter = new G_CodeFormatter();
             textBox.Text = formatter.formatCode(stringToFormat);
-
-
-
-
-
 
         }
 
