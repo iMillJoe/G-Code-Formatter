@@ -49,20 +49,19 @@ namespace G_Code_Formatter
         private void loadFile()
         {
 
-            text = 
+            text =
 @"G00 Z=VPPLZ
-G00 G90 G15 H1
+G00 G90 G94 G15 H1
 (THIS IS A COMMENT)
-G4 F       12.0
-G1 X = 1.0(MULTI)   Y0.0(BECAUSE PEOPLE)F1.2(DO ?  )
-N1000 G3 X2.Y 5.
-(NESTED(COMMENT)       BECAUSE      WHY        NOT ?)
-N5 G1 P100 G50
-B200
+M130
+G4 F    5.0 (DWELL 5 SECONDS)
+G1 X=	-1.0(MULTI) Y - 1.0(COMMENTS) F = 100.0  (ON ONE LINE)
+X1.0 Y= 0.
+X= 2
 VC[1] = 100
 NAT200
 G0 Z = VPPLZ Y = VPPLY
-M2";
+M2"; // that shit actually works :/ 
             textBox.Text = text;
             textBox1.Text = text;
 

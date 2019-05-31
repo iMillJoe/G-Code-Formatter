@@ -279,14 +279,14 @@ namespace G_Code_Formatter
             {
                 if (output != "")
                 {
-                    output += $" {word.text()}";
+                    output += $"_{word.text()}";
                 }
                 else
                 {
                     output = $"{word.text()}";
                 }
             }
-            return output + "\r\n";
+            return output + "|\r\n";
         }
 
         public Block copy()
